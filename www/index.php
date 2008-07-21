@@ -1,28 +1,24 @@
-<pre>
 <?php
+define('ROOT_DIR', dirname(__FILE__).'/..');
+require ROOT_DIR.'/include/S3Browser.php';
 
-require '../libs/s3-php/S3.php';
-
-if (!file_exists('../config.inc.php')) {
-  die('config.inc.php is missing. See config.inc.php-sample');
+// Load config
+$configFile = ROOT_DIR.'/config.php';
+if (!file_exists($configFile)) {
+  die('config.php is missing. See config-sample.php');
 }
+$config = include($configFile);
 
-$config = include('../config.inc.php');
-$cacheFile = $config['cache-dir'].'/s3-directory-browser-cache';
+// S3Browser
+$s3b = new S3Browser($config['bucket-name'], $config['s3-access-key'], $config['s3-secret-key']);
+$s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 
-if (file_exists($cacheFile)) {
-  $contents = unserialize(file_get_contents($cacheFile));
-} else {
-  $s3 = new S3($config['s3-access-key'], $config['s3-secret-key']);
-  $contents = $s3->getBucket($config['bucket-name']);
-  file_put_contents($cacheFile, serialize($contents));
-}
+$files = $s3b->getFiles('/');
+?>
 
-$keys = array_keys($contents);
-foreach ($keys as $key) {
-  $parts = explode('/', $key);
-  $dirs[$parts[0]] = $parts[0];
-}
-
-print_r($dirs);
-
+<h2>S3 Browser</h2>
+<ul>
+<? foreach ($files as $file): ?>
+  <li><?= $file ?></li>
+<? endforeach; ?>
+</ul>
