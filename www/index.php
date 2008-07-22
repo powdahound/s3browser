@@ -13,12 +13,13 @@ $config = include($configFile);
 $s3b = new S3Browser($config['bucket-name'], $config['s3-access-key'], $config['s3-secret-key']);
 $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 
-$files = $s3b->getFiles('/');
+$dir = isset($_GET['dir']) ? $_GET['dir'] : '/';
+
+// $scriptDir = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+// $request = $_SERVER['REQUEST_URI'];
+// $dir = str_replace($scriptDir, '', $request);
+
+$files = $s3b->getFiles($dir);
 ?>
 
-<h2>S3 Browser</h2>
-<ul>
-<? foreach ($files as $file): ?>
-  <li><?= $file ?></li>
-<? endforeach; ?>
-</ul>
+<? include ROOT_DIR.'/templates/plain.tpl.php'; ?>

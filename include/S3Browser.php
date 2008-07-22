@@ -22,16 +22,43 @@ class S3Browser {
   }
   
   public function getFiles($path = '/') {
+    $path = rtrim($path, '/');
+
     $bContents = $this->getBucketContents();
-    $contents = array();
     
+    $contents = array();
     $keys = array_keys($bContents);
+
+    $regexPath = ($path == '/') ? '' : preg_quote($path, '/');
+    $regex = '/'.$regexPath.'\/([^\/]*)/';
     foreach ($keys as $key) {
-      $parts = explode('/', $key);
-      $contents[$parts[0]] = $parts[0];
+      $absKey = '/'.$key;
+      preg_match($regex, $absKey, $matches);
+      // echo "<h2>".$absKey."</h2>";
+      // echo "<pre>";
+      // print_r($matches);
+      // echo "</pre>";
+      if (!isset($matches[1]) || $matches[1] == '') continue;
+      
+      $file = $matches[1];
+      if (!isset($contents[$file])) {
+        $contents[$file] = $bContents[$key];
+      }
     }
     
     return $contents;
+  }
+  
+  public function getBreadcrumb($path = '/') {
+    $path = trim($path, '/'); // so we don't get nulls when exploding
+    $parts = explode('/', $path);
+    $crumbs = array();
+    
+    for ($i = 0; $i < count($parts); $i++) {
+      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1));
+    }
+    
+    return $crumbs;
   }
   
   private function getBucketContents() {
