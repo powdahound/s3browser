@@ -12,5 +12,6 @@ $c['cache-dir'] = '/tmp';
 
 // Bucket
 $c['bucket-name'] = '';
+$c['bucket-url-prefix'] = 'http://'.$c['bucket-name'].'.s3.amazonaws.com';
 
 return $c;
