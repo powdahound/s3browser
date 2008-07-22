@@ -14,4 +14,7 @@ $c['cache-dir'] = '/tmp';
 $c['bucket-name'] = '';
 $c['bucket-url-prefix'] = 'http://'.$c['bucket-name'].'.s3.amazonaws.com';
 
+// Google analytics
+$c['google-analytics-id'] = null;
+
 return $c;
