@@ -34,12 +34,12 @@
 </head>
 <body>
   <h1><?= $config['bucket-name'] ?></h1>
-  <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="?dir=/<?= $name ?>"><?= $key ?></a><? endforeach ?>
+  <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="/<?= $name ?>"><?= $key ?></a><? endforeach ?>
   <ul>
   <? foreach ($files as $key => $info): ?>
     <li>
       <? if ($info['size'] == 16): ?>
-      <a href="?dir=/<?= $info['name'] ?>"><?= $key ?>/</a>
+      <a href="/<?= $info['name'] ?>"><?= $key ?>/</a>
       <? else: ?>
       <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a>
       <? endif; ?>
