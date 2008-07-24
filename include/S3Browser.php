@@ -55,7 +55,7 @@ class S3Browser {
     $crumbs = array();
     
     for ($i = 0; $i < count($parts); $i++) {
-      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1));
+      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
     }
     
     return $crumbs;
