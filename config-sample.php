@@ -2,6 +2,9 @@
 
 $c = array();
 
+// Browser config
+$c['base-path'] = null;
+
 // S3 config
 $c['s3-access-key'] = '';
 $c['s3-secret-key'] = '';

@@ -14,7 +14,7 @@ $s3b = new S3Browser($config['bucket-name'], $config['s3-access-key'], $config['
 $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 
 // Get current directory from URL
-$dir = $_SERVER['REQUEST_URI'];
+$dir = str_replace($c['base-path'], '', $_SERVER['REQUEST_URI']);
 
 $files = $s3b->getFiles($dir);
 ?>
