@@ -17,6 +17,5 @@ $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 $dir = str_replace($c['base-path'], '', $_SERVER['REQUEST_URI']);
 
 $files = $s3b->getFiles($dir);
-?>
 
-<? include ROOT_DIR.'/templates/plain.tpl.php'; ?>
+include ROOT_DIR.'/templates/plain.tpl.php';

@@ -1,3 +1,5 @@
+<? if (empty($files)) header("HTTP/1.0 404 Not Found"); ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 
@@ -35,17 +37,22 @@
 <body>
   <h1><?= $config['bucket-name'] ?></h1>
   <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?></a><? endforeach ?>
+  
+  <? if (empty($files)): ?>
+    <p>No files found with that prefix.</p>
+  <? else: ?>
   <ul>
   <? foreach ($files as $key => $info): ?>
     <li>
       <? if ($info['size'] == 16): ?>
       <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>"><?= $key ?>/</a>
       <? else: ?>
-      <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a>
+      <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a> (<?= $info['hsize'] ?>)
       <? endif; ?>
     </li>
   <? endforeach; ?>
   </ul>
+  <? endif; ?>
   
   <? if (isset($config['google-analytics-id'])): ?>
   <script type="text/javascript">
