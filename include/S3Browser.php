@@ -67,25 +67,6 @@ class S3Browser {
   }
   
   /**
-   * Returns directory data for all levels of the given path to be used when
-   * displaying a breadcrumb.
-   *
-   * @param string $path
-   * @return array
-   */
-  public function getBreadcrumb($path = '/') {
-    $path = trim($path, '/'); // so we don't get nulls when exploding
-    $parts = explode('/', $path);
-    $crumbs = array();
-    
-    for ($i = 0; $i < count($parts); $i++) {
-      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
-    }
-    
-    return $crumbs;
-  }
-  
-  /**
    * Get S3 bucket contents (from cache if possible)
    *
    * @return array
@@ -115,6 +96,43 @@ class S3Browser {
     }
     
     return $contents;
+  }
+  
+  /**
+   * Returns directory data for all levels of the given path to be used when
+   * displaying a breadcrumb.
+   *
+   * @param string $path
+   * @return array
+   */
+  public static function getBreadcrumb($path = '/') {
+    if ($path == '/')
+      return array('/' => '');
+    
+    $path = trim($path, '/'); // so we don't get nulls when exploding
+    $parts = explode('/', $path);
+    $crumbs = array('/' => '');
+
+    for ($i = 0; $i < count($parts); $i++) {
+      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
+    }
+    
+    return $crumbs;
+  }
+  
+  /**
+   * Returns parent directory 
+   *
+   * @param string $path
+   * @return array
+   */
+  public static function getParent($path = '/') {
+    $crumbs = self::getBreadcrumb($path);
+    
+    $current = array_pop($crumbs);
+    $parent = array_pop($crumbs);
+
+    return $parent;
   }
   
   /**

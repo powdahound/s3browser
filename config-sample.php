@@ -5,6 +5,7 @@ $c = array();
 // Browser config
 $c['base-path'] = null;
 $c['theme'] = 'plain';
+$c['page-title'] = 'My Amazon S3 files';
 
 // S3 config
 $c['s3-access-key'] = '';

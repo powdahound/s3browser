@@ -20,23 +20,67 @@
 	    padding: 0;
       margin: 0;
 	  }
+	  
 	  body {
 	    background-color: #fff;
 	  }
+	  
 	  p, li, td, div {
-      font-size: 0.9em;
+      font-size: 13px;
 	  }
-
+	  
+    img {
+      border: 0;
+    }
+    
 	  h2 {
 	    font-size: 1em;
 	    margin: 5px 0;
 	  }
+
 	  ul {
-	    margin-left: 5px;
+ 	    list-style: none;
 	  }
-	  li {
- 	    margin-left: 15px;
+  	  ul li {
+   	    list-style: none;
+  	  }
+    	  ul li img {
+    	    vertical-align: middle;
+    	  }
+	  
+	  span.size {
+	    color: #ccc;
+	    font-size: 10px;
 	  }
+	  
+	  a {
+	    text-decoration: none;
+ 	    color: #666;
+	  }
+  	  a:hover {
+  	    color: #000;
+  	  }
+  	  a span {
+  	    text-decoration: underline;
+  	  }
+	  
+	  div.breadcrumb {
+	    margin-bottom: 5px;
+	    border-bottom: 1px solid #eee;
+	  }
+	    div.breadcrumb, div.breadcrumb a {
+	      color: #000;
+        font-size: 18px;
+        font-weight: normal;
+	    }
+	    div.breadcrumb ul {
+	      display: inline;
+	      margin-left: 5px;
+	    }
+	    div.breadcrumb ul li {
+	      display: inline;
+	      margin-left: -5px;
+	    }
 	  
 	  #header {
 	    background-color: #999;
@@ -50,7 +94,7 @@
 	  
 	  #contents {
 	    border-top: 1px solid #eee;
- 	    padding: 10px;
+ 	    padding: 15px 20px;
 	  }
 	  
 	  #footer {
@@ -64,29 +108,55 @@
 	    }
 	    #footer a {
  	      color: #999;
+ 	      text-decoration: underline;
 	    }
 	</style>
 </head>
 <body>
   <div id="header">
-    <h1><?= $config['bucket-name'] ?></h1>
+    <h1><?= $config['page-title'] ?></h1>
   </div>
   
   <div id="contents">
+    
     <div class="breadcrumb">
-      <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?></a><? endforeach ?>
+      Index of 
+      <ul>
+        <li><a href="<?= $c['base-path'] ?>"><?= $config['bucket-name'] ?>/</a></li>
+        <? foreach (S3Browser::getBreadcrumb($dir) as $key => $name): ?>
+        <? if ($key != '/'): ?>
+        <li><a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?>/</a></li>
+        <? endif; ?>
+        <? endforeach ?>
+      </ul>
     </div>
   
     <? if (empty($files)): ?>
       <p>No files found with that prefix.</p>
     <? else: ?>
     <ul>
+
+    <? if (S3Browser::getParent($dir) !== null): ?>
+      <li>
+        <a href="<?= $c['base-path'] ?>/<?= S3Browser::getParent($dir) ?>">
+          <img src="<?= $c['base-path'] ?>/themes/plain/img/arrow_top.gif">
+          <span>..</span>
+        </a>
+      </li>
+    <? endif; ?>
     <? foreach ($files as $key => $info): ?>
       <li>
         <? if ($info['size'] == 16): ?>
-        <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>"><?= $key ?>/</a>
+        <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>">
+          <img src="<?= $c['base-path'] ?>/themes/plain/img/folder.gif">
+          <span><?= $key ?></span>
+        </a>
         <? else: ?>
-        <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a> (<?= $info['hsize'] ?>)
+        <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>">
+          <img src="<?= $c['base-path'] ?>/themes/plain/img/file.gif">
+          <span><?= $key ?></span>
+        </a>
+        <span class="size"><?= $info['hsize'] ?></span>
         <? endif; ?>
       </li>
     <? endforeach; ?>
