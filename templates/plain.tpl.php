@@ -1,3 +1,10 @@
+<?/*
+ * 
+ * Light blue: #1a52d6
+ * Dark blue:  #011826
+ * Green:      #2f7360
+ * 
+ */?>
 <? if (empty($files)) header("HTTP/1.0 404 Not Found"); ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -14,14 +21,12 @@
       margin: 0;
 	  }
 	  body {
-	    padding: 10px;
+	    background-color: #fff;
 	  }
 	  p, li, td, div {
       font-size: 0.9em;
 	  }
-	  h1 {
-	    margin-bottom: 15px;
-	  }
+
 	  h2 {
 	    font-size: 1em;
 	    margin: 5px 0;
@@ -32,28 +37,68 @@
 	  li {
  	    margin-left: 15px;
 	  }
+	  
+	  #header {
+	    background-color: #999;
+	    padding: 10px 15px;
+	    border-bottom: 1px solid #ccc;
+	  }
+	    #header h1 {
+	      color: #000;
+	      font-size: 26px;
+	    }
+	  
+	  #contents {
+	    border-top: 1px solid #eee;
+ 	    padding: 10px;
+	  }
+	  
+	  #footer {
+	    border-top: 1px solid #ddd;
+	    padding: 2px 5px;
+	  }
+	    #footer p {
+	      font-size: 11px;
+	      color: #999;
+	      text-align: right;
+	    }
+	    #footer a {
+ 	      color: #999;
+	    }
 	</style>
 </head>
 <body>
-  <h1><?= $config['bucket-name'] ?></h1>
-  <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?></a><? endforeach ?>
+  <div id="header">
+    <h1><?= $config['bucket-name'] ?></h1>
+  </div>
   
-  <? if (empty($files)): ?>
-    <p>No files found with that prefix.</p>
-  <? else: ?>
-  <ul>
-  <? foreach ($files as $key => $info): ?>
-    <li>
-      <? if ($info['size'] == 16): ?>
-      <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>"><?= $key ?>/</a>
-      <? else: ?>
-      <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a> (<?= $info['hsize'] ?>)
-      <? endif; ?>
-    </li>
-  <? endforeach; ?>
-  </ul>
-  <? endif; ?>
+  <div id="contents">
+    <div class="breadcrumb">
+      <? foreach ($s3b->getBreadcrumb($dir) as $key => $name): ?>/<a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?></a><? endforeach ?>
+    </div>
   
+    <? if (empty($files)): ?>
+      <p>No files found with that prefix.</p>
+    <? else: ?>
+    <ul>
+    <? foreach ($files as $key => $info): ?>
+      <li>
+        <? if ($info['size'] == 16): ?>
+        <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>"><?= $key ?>/</a>
+        <? else: ?>
+        <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>"><?= $key ?></a> (<?= $info['hsize'] ?>)
+        <? endif; ?>
+      </li>
+    <? endforeach; ?>
+    </ul>
+    <? endif; ?>
+  
+  </div>
+  
+  <div id="footer">
+    <p>Powered by <a href="http://code.google.com/p/s3-directory-browser/" target="_blank">s3-directory-browser</a></p>
+  </div>
+
   <? if (isset($config['google-analytics-id'])): ?>
   <script type="text/javascript">
   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
