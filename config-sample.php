@@ -4,6 +4,7 @@ $c = array();
 
 // Browser config
 $c['base-path'] = null;
+$c['theme'] = 'plain';
 
 // S3 config
 $c['s3-access-key'] = '';
