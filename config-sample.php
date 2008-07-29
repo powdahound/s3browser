@@ -6,6 +6,7 @@ $c = array();
 $c['base-path'] = null;
 $c['theme'] = 'plain';
 $c['page-title'] = 'My Amazon S3 files';
+$c['torrent-threshold'] = null; // file size in bytes over which to serve files as torrents
 
 // S3 config
 $c['s3-access-key'] = '';

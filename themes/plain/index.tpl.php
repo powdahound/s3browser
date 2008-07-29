@@ -148,6 +148,7 @@
       </li>
     <? endif; ?>
     <? foreach ($files as $key => $info): ?>
+         <? $asTorrent = (!is_null($c['torrent-threshold']) && $info['size'] > $c['torrent-threshold']); ?>
       <li>
         <? if ($info['size'] == 16): ?>
         <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>">
@@ -155,7 +156,7 @@
           <span><?= $key ?></span>
         </a>
         <? else: ?>
-        <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?>">
+           <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?><? if ($asTorrent): ?>?torrent<? endif; ?>" <? if (isset($c['google-analytics-id'])): ?>onclick="javascript:pageTracker._trackPageview('<?= $info['name'] ?>');"<? endif; ?>>
           <img src="<?= $c['base-path'] ?>/themes/plain/img/file.gif">
           <span><?= $key ?></span>
         </a>
