@@ -5,9 +5,9 @@ require ROOT_DIR.'/libs/s3-php/S3.php';
 // Sort with dirs first, then alphabetical ascending
 function s3browser_file_sort($a, $b) {
   // dir > file
-  if ($a['size'] == 16 && $b['size'] > 16)
+  if ($a['type'] == 'd' && $b['type'] == 'f')
     return -1;
-  else if ($a['size'] > 16 && $b['size'] == 16)
+  else if ($a['type'] == 'f' && $b['type'] == 'd')
     return 1;
   
   return strcasecmp($a['name'], $b['name']);
@@ -68,14 +68,15 @@ class S3Browser {
       $file = $matches[1];
       if (!isset($contents[$file])) {
         $contents[$file] = $bContents[$key];
-        
+
         // store human-readable size
         $contents[$file]['hsize'] = self::formatSize($bContents[$key]['size']);
+        $contents[$file]['type'] = (substr($contents[$file]['name'], -1) == '/') ? 'd' : 'f';
       }
     }
 
     uasort($contents, 's3browser_file_sort');
-    
+
     return $contents;
   }
   

@@ -104,13 +104,13 @@
 	  }
 	  
 	  #footer {
-	    border-top: 1px solid #ddd;
-	    padding: 2px 5px;
+	    border-top: 1px solid #eee;
+	    padding: 2px 5px 5px;
 	  }
 	    #footer p {
 	      font-size: 11px;
 	      color: #999;
-	      text-align: right;
+              text-align: right;
 	    }
 	    #footer a {
               color: #999;
@@ -153,7 +153,7 @@
     <? foreach ($files as $key => $info): ?>
          <? $asTorrent = (!is_null($c['torrent-threshold']) && $info['size'] > $c['torrent-threshold']); ?>
       <li>
-        <? if ($info['size'] == 16): ?>
+        <? if ($info['type'] == 'd'): ?>
         <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>">
           <img src="<?= $c['base-path'] ?>/themes/plain/img/folder.gif">
           <span><?= $key ?></span>
