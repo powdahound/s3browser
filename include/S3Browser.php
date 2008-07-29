@@ -2,6 +2,17 @@
 
 require ROOT_DIR.'/libs/s3-php/S3.php';
 
+// Sort with dirs first, then alphabetical ascending
+function s3browser_file_sort($a, $b) {
+  // dir > file
+  if ($a['size'] == 16 && $b['size'] > 16)
+    return -1;
+  else if ($a['size'] > 16 && $b['size'] == 16)
+    return 1;
+  
+  return strcasecmp($a['name'], $b['name']);
+}
+
 class S3Browser {
   private $s3Bucket;
   private $s3AccessKey;
@@ -62,6 +73,8 @@ class S3Browser {
         $contents[$file]['hsize'] = self::formatSize($bContents[$key]['size']);
       }
     }
+
+    uasort($contents, 's3browser_file_sort');
     
     return $contents;
   }
