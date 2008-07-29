@@ -70,8 +70,8 @@
 	  }
 	    div.breadcrumb, div.breadcrumb a {
 	      color: #000;
-        font-size: 18px;
-        font-weight: normal;
+              font-size: 18px;
+              font-weight: normal;
 	    }
 	    div.breadcrumb ul {
 	      display: inline;
@@ -81,6 +81,9 @@
 	      display: inline;
 	      margin-left: -5px;
 	    }
+              div.breadcrumb ul li a:hover {
+                background-color: #efefef;
+              }
 	  
 	  #header {
 	    background-color: #999;
@@ -107,7 +110,7 @@
 	      text-align: right;
 	    }
 	    #footer a {
- 	      color: #999;
+              color: #999;
  	      text-decoration: underline;
 	    }
 	</style>
@@ -122,7 +125,7 @@
     <div class="breadcrumb">
       Index of 
       <ul>
-        <li><a href="<?= $c['base-path'] ?>"><?= $config['bucket-name'] ?>/</a></li>
+        <li><a href="<?= $c['base-path'] ?>/"><?= $config['bucket-name'] ?>/</a></li>
         <? foreach (S3Browser::getBreadcrumb($dir) as $key => $name): ?>
         <? if ($key != '/'): ?>
         <li><a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?>/</a></li>
