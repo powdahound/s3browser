@@ -159,12 +159,11 @@ class S3Browser {
     $size = (int)$bytes;
     $units = array("B", "K", "M", "G", "T", "P");
     $unit = 0;
+
     while ($size >= 1024) {
       $unit++;
       $size = $size/1024;
     }
-
-    if ($unit == 0 && $size == 16) return null;
 
     return number_format($size, ($unit ? 2 : 0)).''.$units[$unit];
   }
