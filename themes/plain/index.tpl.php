@@ -57,12 +57,15 @@
 	    text-decoration: none;
  	    color: #666;
 	  }
+  	    a span {
+  	      text-decoration: none;
+  	    }
   	  a:hover {
   	    color: #000;
   	  }
-  	  a span {
-  	    text-decoration: underline;
-  	  }
+    	    a:hover span {
+  	      text-decoration: underline;
+  	    }
 	  
 	  div.breadcrumb {
 	    margin-bottom: 5px;
