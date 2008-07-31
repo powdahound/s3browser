@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title><?= $config['bucket-name'] ?></title>
+	<title>Index of <?= $config['bucket-name'].$dir ?></title>
 	<style type="text/css" media="screen">
 	  * {
 	    font-family: verdana, sans-serif;
