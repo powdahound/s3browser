@@ -1,10 +1,3 @@
-<?/*
- * 
- * Light blue: #1a52d6
- * Dark blue:  #011826
- * Green:      #2f7360
- * 
- */?>
 <? if (empty($files)) header("HTTP/1.0 404 Not Found"); ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -120,7 +113,7 @@
 </head>
 <body>
   <div id="header">
-    <h1><?= $config['page-title'] ?></h1>
+    <h1><?= $config['page-header'] ?></h1>
   </div>
   
   <div id="contents">

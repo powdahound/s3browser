@@ -2,10 +2,6 @@
 
 $c = array();
 
-/**********************************
- * Browser config
- **********************************/
-
 // Base path to directory the browser is running in. Leave blank if running out of a subdomain.
 $c['base-path'] = null;
 
@@ -13,7 +9,7 @@ $c['base-path'] = null;
 $c['theme'] = 'plain';
 
 // Text to use as page header
-$c['page-title'] = 'My Amazon S3 files';
+$c['page-header'] = 'My Amazon S3 files';
 
 // File size in bytes over which to serve files as torrents
 $c['torrent-threshold'] = null;
