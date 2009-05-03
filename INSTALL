@@ -5,9 +5,9 @@
 
 NOTE: S3 Directory Browser is currently designed to run on its own subdomain. e.g.: http://s3-files.example.com 
 
-1. Check out the latest release from Subversion:
+1. Check out the latest release from GitHub:
 
-   svn checkout http://s3-directory-browser.googlecode.com/svn/tags/0.1/ s3-directory-browser
+   git clone git@github.com:powdahound/s3browser.git
 
 2. Copy config-sample.php to config.php and edit config to your liking. Each option is documented in the config file.
 
@@ -17,7 +17,7 @@ NOTE: S3 Directory Browser is currently designed to run on its own subdomain. e.
      ServerName s3-files.example.com
    
      # Root directory
-     DocumentRoot /srv/www/s3-files/s3-directory-browser
+     DocumentRoot /srv/www/s3browser
      <Directory />
        Options -Indexes FollowSymLinks MultiViews
        AllowOverride All
@@ -30,5 +30,4 @@ NOTE: S3 Directory Browser is currently designed to run on its own subdomain. e.
    
    sudo /etc/init.d/apache2 reload
 
-5. Report any issues or suggestions here: http://code.google.com/p/s3-directory-browser/
-
+5. Report any issues or suggestions here: http://github.com/powdahound/s3browser/

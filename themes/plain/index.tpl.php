@@ -5,111 +5,111 @@
 
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Index of <?= $config['bucket-name'].$dir ?></title>
-	<style type="text/css" media="screen">
-	  * {
-	    font-family: verdana, sans-serif;
-	    padding: 0;
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Index of <?= $config['bucket-name'].$dir ?></title>
+  <style type="text/css" media="screen">
+    * {
+      font-family: verdana, sans-serif;
+      padding: 0;
       margin: 0;
-	  }
-	  
-	  body {
-	    background-color: #fff;
-	  }
-	  
-	  p, li, td, div {
+    }
+    
+    body {
+      background-color: #fff;
+    }
+    
+    p, li, td, div {
       font-size: 13px;
-	  }
-	  
+    }
+    
     img {
       border: 0;
     }
     
-	  h2 {
-	    font-size: 1em;
-	    margin: 5px 0;
-	  }
+    h2 {
+      font-size: 1em;
+      margin: 5px 0;
+    }
 
-	  ul {
- 	    list-style: none;
-	  }
-  	  ul li {
-   	    list-style: none;
-  	  }
-    	  ul li img {
-    	    vertical-align: middle;
-    	  }
-	  
-	  span.size {
-	    color: #ccc;
-	    font-size: 10px;
-	  }
-	  
-	  a {
-	    text-decoration: none;
- 	    color: #666;
-	  }
-  	    a span {
-  	      text-decoration: none;
-  	    }
-  	  a:hover {
-  	    color: #000;
-  	  }
-    	    a:hover span {
-  	      text-decoration: underline;
-  	    }
-	  
-	  div.breadcrumb {
-	    margin-bottom: 5px;
-	    border-bottom: 1px solid #eee;
-	  }
-	    div.breadcrumb, div.breadcrumb a {
-	      color: #000;
+    ul {
+       list-style: none;
+    }
+      ul li {
+         list-style: none;
+      }
+        ul li img {
+          vertical-align: middle;
+        }
+    
+    span.size {
+      color: #ccc;
+      font-size: 10px;
+    }
+    
+    a {
+      text-decoration: none;
+       color: #666;
+    }
+        a span {
+          text-decoration: none;
+        }
+      a:hover {
+        color: #000;
+      }
+          a:hover span {
+          text-decoration: underline;
+        }
+    
+    div.breadcrumb {
+      margin-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+      div.breadcrumb, div.breadcrumb a {
+        color: #000;
               font-size: 18px;
               font-weight: normal;
-	    }
-	    div.breadcrumb ul {
-	      display: inline;
-	      margin-left: 5px;
-	    }
-	    div.breadcrumb ul li {
-	      display: inline;
-	      margin-left: -5px;
-	    }
+      }
+      div.breadcrumb ul {
+        display: inline;
+        margin-left: 5px;
+      }
+      div.breadcrumb ul li {
+        display: inline;
+        margin-left: -5px;
+      }
               div.breadcrumb ul li a:hover {
                 background-color: #efefef;
               }
-	  
-	  #header {
-	    background-color: #999;
-	    padding: 10px 15px;
-	    border-bottom: 1px solid #ccc;
-	  }
-	    #header h1 {
-	      color: #000;
-	      font-size: 26px;
-	    }
-	  
-	  #contents {
-	    border-top: 1px solid #eee;
- 	    padding: 15px 20px;
-	  }
-	  
-	  #footer {
-	    border-top: 1px solid #eee;
-	    padding: 2px 5px 5px;
-	  }
-	    #footer p {
-	      font-size: 11px;
-	      color: #999;
+    
+    #header {
+      background-color: #999;
+      padding: 10px 15px;
+      border-bottom: 1px solid #ccc;
+    }
+      #header h1 {
+        color: #000;
+        font-size: 26px;
+      }
+    
+    #contents {
+      border-top: 1px solid #eee;
+       padding: 15px 20px;
+    }
+    
+    #footer {
+      border-top: 1px solid #eee;
+      padding: 2px 5px 5px;
+    }
+      #footer p {
+        font-size: 11px;
+        color: #999;
               text-align: right;
-	    }
-	    #footer a {
+      }
+      #footer a {
               color: #999;
- 	      text-decoration: underline;
-	    }
-	</style>
+         text-decoration: underline;
+      }
+  </style>
 </head>
 <body>
   <div id="header">
@@ -166,7 +166,7 @@
   </div>
   
   <div id="footer">
-    <p>Powered by <a href="http://code.google.com/p/s3-directory-browser/" target="_blank">s3-directory-browser</a></p>
+    <p>Powered by <a href="http://github.com/powdahound/s3browser/" target="_blank">S3 Browser</a></p>
   </div>
 
   <? if (isset($config['google-analytics-id'])): ?>
