@@ -12,7 +12,10 @@ Installation
         cd /srv/www
         git clone git@github.com:powdahound/s3browser.git
 
-2. Copy config-sample.php to config.php and edit config to your liking. Each option is documented in the config file.
+2. Tweak config to your liking. Each option is documented in the config file.
+
+        cp config-sample.php config.php
+        vim config.php
 
 3. Add an Apache VirtualHost for your new subdomain. e.g.:
 
