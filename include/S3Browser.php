@@ -52,7 +52,7 @@ class S3Browser {
     // get list of all files
     $bContents = $this->getBucketContents();
     
-    if (!$bContents) {
+    if ($bContents === null) {
       return null;
     }
 
@@ -106,6 +106,11 @@ class S3Browser {
     if (!$contents) {
       $s3 = new S3($this->s3AccessKey, $this->s3SecretKey);
       $contents = $s3->getBucket($this->s3Bucket);
+
+      // we weren't able to access the bucket
+      if (!is_array($contents)) {
+        return null;
+      }
       
       // save if caching is enabled
       if ($this->cacheDuration) {

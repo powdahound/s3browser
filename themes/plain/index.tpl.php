@@ -132,7 +132,7 @@
     </div>
   
     <? if (empty($files)): ?>
-      <p>No files found with that prefix.</p>
+      <p>No files found.</p>
     <? else: ?>
     <ul>
 
