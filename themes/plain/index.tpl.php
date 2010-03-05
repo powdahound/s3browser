@@ -121,11 +121,11 @@
       Index of 
       <ul>
         <li>
-          <a href="<?= $c['base-path'] ?>/"><?= $config['bucket-name'] ?>/</a>
+          <a href="<?= $config['base-path'] ?>/"><?= $config['bucket-name'] ?>/</a>
         </li>
         <? foreach (S3Browser::getBreadcrumb($dir) as $key => $name): ?>
         <? if ($key != '/'): ?>
-        <li><a href="<?= $c['base-path'] ?>/<?= $name ?>"><?= $key ?>/</a></li>
+        <li><a href="<?= $config['base-path'] ?>/<?= $name ?>"><?= $key ?>/</a></li>
         <? endif; ?>
         <? endforeach ?>
       </ul>
@@ -138,23 +138,23 @@
 
     <? if (S3Browser::getParent($dir) !== null): ?>
       <li>
-        <a href="<?= $c['base-path'] ?>/<?= S3Browser::getParent($dir) ?>">
-          <img src="<?= $c['base-path'] ?>/themes/plain/img/arrow_top.gif">
+        <a href="<?= $config['base-path'] ?>/<?= S3Browser::getParent($dir) ?>">
+          <img src="<?= $config['base-path'] ?>/themes/plain/img/arrow_top.gif">
           <span>..</span>
         </a>
       </li>
     <? endif; ?>
     <? foreach ($files as $key => $info): ?>
-      <? $asTorrent = (!is_null($c['torrent-threshold']) && $info['size'] > $c['torrent-threshold']); ?>
+      <? $asTorrent = (!is_null($config['torrent-threshold']) && $info['size'] > $config['torrent-threshold']); ?>
       <li>
-        <? if ($info['type'] == 'd'): ?>
-        <a href="<?= $c['base-path'] ?>/<?= $info['name'] ?>">
-          <img src="<?= $c['base-path'] ?>/themes/plain/img/folder.gif">
-          <span><?= $key ?></span>
-        </a>
+        <? if (is_array($info['files'])): ?>
+          <a href="<?= $config['base-path'] ?>/<?= $info['path'] ?>">
+            <img src="<?= $config['base-path'] ?>/themes/plain/img/folder.gif">
+            <span><?= $key ?></span>
+          </a>
         <? else: ?>
-           <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['name'] ?><? if ($asTorrent): ?>?torrent<? endif; ?>" <? if (isset($c['google-analytics-id'])): ?>onclick="javascript:pageTracker._trackPageview('<?= $info['name'] ?>');"<? endif; ?>>
-          <img src="<?= $c['base-path'] ?>/themes/plain/img/file.gif">
+           <a href="<?= $config['bucket-url-prefix'] ?>/<?= $info['path'] ?><? if ($asTorrent): ?>?torrent<? endif; ?>" <? if (isset($config['google-analytics-id'])): ?>onclick="javascript:pageTracker._trackPageview('<?= $info['path'] ?>');"<? endif; ?>>
+          <img src="<?= $config['base-path'] ?>/themes/plain/img/file.gif">
           <span><?= $key ?></span>
         </a>
         <span class="size"><?= $info['hsize'] ?></span>

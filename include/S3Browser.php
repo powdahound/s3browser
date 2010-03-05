@@ -36,63 +36,26 @@ class S3Browser {
    * @return array        Directory contents
    */
   public function getFiles($path = '/') {
-    $path = rtrim($path, '/');
-
-    // get list of all files
-    $bContents = $this->getBucketContents();
-    
-    if ($bContents === null) {
+    $tree = $this->getTree();
+    if ($tree === null) {
       return null;
     }
-
-    $contents = array();
-    $keys = array_keys($bContents);
-
-    // build regex to help search for files with given $path
-    $regexPath = ($path == '/') ? '' : preg_quote($path, '/');
-    $regex = '/'.$regexPath.'\/([^\/]*)/';
     
-    // find all the files with keys matching our regex and store them
-    foreach ($keys as $key) {
-      $absKey = '/'.$key;
-      preg_match($regex, $absKey, $matches);
-      if (!isset($matches[1]) || $matches[1] == '') continue;
+    $path = trim($path, '/');
+    if ($path) {
+      $parts = explode('/', $path);
       
-      $file = $matches[1];
-      if (!isset($contents[$file])) {
-        $contents[$file] = $bContents[$key];
-
-        // store human-readable size
-        $contents[$file]['hsize'] = self::formatSize($bContents[$key]['size']);
-        $contents[$file]['type'] = (substr($contents[$file]['name'], -1) == '/') ? 'd' : 'f';
+      // walk to correct point in tree
+      foreach ($parts as $part) {
+        if (!isset($tree[$part])) {
+          return array();
+        }
+        $tree = $tree[$part]['files'];
       }
     }
-
-    uasort($contents, array($this, 'sort'));
-
-    return $contents;
-  }
-  
-  /**
-   * Returns directory data for all levels of the given path to be used when
-   * displaying a breadcrumb.
-   *
-   * @param string $path
-   * @return array
-   */
-  public static function getBreadcrumb($path = '/') {
-    if ($path == '/')
-      return array('/' => '');
     
-    $path = trim($path, '/'); // so we don't get nulls when exploding
-    $parts = explode('/', $path);
-    $crumbs = array('/' => '');
-
-    for ($i = 0; $i < count($parts); $i++) {
-      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
-    }
-    
-    return $crumbs;
+    uasort($tree, array($this, 'sort'));
+    return $tree;
   }
   
   /**
@@ -133,23 +96,67 @@ class S3Browser {
   }
   
   /**
-   * Returns parent directory 
+   * Build a tree representing the directory structure of the bucket's
+   * contents.
    *
-   * @param string $path
    * @return array
    */
-  public static function getParent($path = '/') {
-    $crumbs = self::getBreadcrumb($path);
+  public function getTree() {
+    $tree = array();
+    $contents = $this->getBucketContents();
+    if ($contents === null) {
+      return null;
+    }
     
-    $current = array_pop($crumbs);
-    $parent = array_pop($crumbs);
+    foreach ($contents as $key => $data) {
+      $isFolder = false;
 
-    return $parent;
+      // S3Hub and S3Fox append this suffix to folders
+      if (substr($key, -9) == '_$folder$') {
+        $key = substr($key, 0, -9);
+        $isFolder = true;
+      }
+      // Assume any key ending with / is a folder
+      else if (substr($key, -1) == '/') {
+        $key = substr($key, 0, -1);
+        $isFolder = true;
+      }
+      
+      $parts = explode('/', $key);
+      
+      // add to tree
+      $cur = &$tree;
+      $numParts = count($parts);
+      for ($i = 0; $i < $numParts; $i++) {
+        $part = $parts[$i];
+
+        // file
+        if (!$isFolder && $i == $numParts-1 && !isset($cur[$part])) {
+          $cur[$part] = $data;
+          $cur[$part]['hsize'] = self::formatSize($data['size']);
+          $cur[$part]['path'] = $cur[$part]['name'];
+          $cur[$part]['name'] = $part;
+        }
+        // directory
+        else {
+          if (!isset($cur[$part])) {
+            $path = implode('/', array_slice($parts, 0, $i+1));
+            $cur[$part] = array(
+              'path' => $path,
+              'name' => $part,
+              'files' => array());
+          }
+          $cur = &$cur[$part]['files'];
+        }        
+      }
+    }
+    
+    return $tree;
   }
-  
+
 
   /////////////////////////////////////////////////////////////////////////////
-  // Private functions
+  // Static functions
   /////////////////////////////////////////////////////////////////////////////
   
   /**
@@ -171,15 +178,56 @@ class S3Browser {
     return number_format($size, ($unit ? 2 : 0)).''.$units[$unit];
   }
   
+  /**
+   * Returns directory data for all levels of the given path to be used when
+   * displaying a breadcrumb.
+   *
+   * @param string $path
+   * @return array
+   */
+  public static function getBreadcrumb($path = '/') {
+    if ($path == '/')
+      return array('/' => '');
+    
+    $path = trim($path, '/'); // so we don't get nulls when exploding
+    $parts = explode('/', $path);
+    $crumbs = array('/' => '');
+
+    for ($i = 0; $i < count($parts); $i++) {
+      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
+    }
+    
+    return $crumbs;
+  }
+
+  /**
+   * Returns parent directory 
+   *
+   * @param string $path
+   * @return array
+   */
+  public static function getParent($path = '/') {
+    $crumbs = self::getBreadcrumb($path);
+    
+    $current = array_pop($crumbs);
+    $parent = array_pop($crumbs);
+
+    return $parent;
+  }
+
   // Sort with dirs first, then alphabetical ascending
   private static function sort($a, $b) {
+    $a_is_dir = isset($a['files']);
+    $b_is_dir = isset($b['files']);
+
     // dir > file
-    if ($a['type'] == 'd' && $b['type'] == 'f')
+    if ($a_is_dir && !$b_is_dir) {
       return -1;
-    else if ($a['type'] == 'f' && $b['type'] == 'd')
+    } else if (!$a_is_dir && $b_is_dir) {
       return 1;
+    }
 
     return strcasecmp($a['name'], $b['name']);
   }
-  
+
 }

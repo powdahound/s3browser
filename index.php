@@ -21,6 +21,7 @@ $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 
 // Get current directory from URL
 $dir = str_replace($config['base-path'], '', $_SERVER['REQUEST_URI']);
+$dir = urldecode($dir);
 
 $files = $s3b->getFiles($dir);
 if ($files === null) {
