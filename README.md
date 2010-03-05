@@ -20,14 +20,13 @@ Installation
 3. Add an Apache VirtualHost for your new subdomain. e.g.:
 
         <VirtualHost *:80>
-          ServerName s3-files.example.com
+          ServerName s3browser.example.com
           DocumentRoot /srv/www/s3browser
-          <Directory />
-            Options -Indexes FollowSymLinks MultiViews
-            AllowOverride All
-            Order allow,deny
-            Allow from all
-          </Directory>
+
+          RewriteEngine On
+          RewriteBase /
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteRule . /index.php [L]
         </VirtualHost>
 
 4. Reload your Apache config:
