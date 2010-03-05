@@ -52,6 +52,10 @@ class S3Browser {
     // get list of all files
     $bContents = $this->getBucketContents();
     
+    if (!$bContents) {
+      return null;
+    }
+
     $contents = array();
     $keys = array_keys($bContents);
 

@@ -23,5 +23,8 @@ $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 $dir = str_replace($config['base-path'], '', $_SERVER['REQUEST_URI']);
 
 $files = $s3b->getFiles($dir);
+if ($files === null) {
+  die('Unable to load bucket: '.$config['bucket-name']);
+}
 
 include ROOT_DIR.'/themes/'.$config['theme'].'/index.tpl.php';
