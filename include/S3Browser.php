@@ -2,17 +2,6 @@
 
 require ROOT_DIR.'/libs/s3-php/S3.php';
 
-// Sort with dirs first, then alphabetical ascending
-function s3browser_file_sort($a, $b) {
-  // dir > file
-  if ($a['type'] == 'd' && $b['type'] == 'f')
-    return -1;
-  else if ($a['type'] == 'f' && $b['type'] == 'd')
-    return 1;
-  
-  return strcasecmp($a['name'], $b['name']);
-}
-
 class S3Browser {
   private $s3Bucket;
   private $s3AccessKey;
@@ -79,9 +68,31 @@ class S3Browser {
       }
     }
 
-    uasort($contents, 's3browser_file_sort');
+    uasort($contents, array($this, 'sort'));
 
     return $contents;
+  }
+  
+  /**
+   * Returns directory data for all levels of the given path to be used when
+   * displaying a breadcrumb.
+   *
+   * @param string $path
+   * @return array
+   */
+  public static function getBreadcrumb($path = '/') {
+    if ($path == '/')
+      return array('/' => '');
+    
+    $path = trim($path, '/'); // so we don't get nulls when exploding
+    $parts = explode('/', $path);
+    $crumbs = array('/' => '');
+
+    for ($i = 0; $i < count($parts); $i++) {
+      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
+    }
+    
+    return $crumbs;
   }
   
   /**
@@ -122,28 +133,6 @@ class S3Browser {
   }
   
   /**
-   * Returns directory data for all levels of the given path to be used when
-   * displaying a breadcrumb.
-   *
-   * @param string $path
-   * @return array
-   */
-  public static function getBreadcrumb($path = '/') {
-    if ($path == '/')
-      return array('/' => '');
-    
-    $path = trim($path, '/'); // so we don't get nulls when exploding
-    $parts = explode('/', $path);
-    $crumbs = array('/' => '');
-
-    for ($i = 0; $i < count($parts); $i++) {
-      $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
-    }
-    
-    return $crumbs;
-  }
-  
-  /**
    * Returns parent directory 
    *
    * @param string $path
@@ -157,6 +146,11 @@ class S3Browser {
 
     return $parent;
   }
+  
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Private functions
+  /////////////////////////////////////////////////////////////////////////////
   
   /**
    * Takes a size in bytes and converts it to a more human-readable format
@@ -176,4 +170,16 @@ class S3Browser {
 
     return number_format($size, ($unit ? 2 : 0)).''.$units[$unit];
   }
+  
+  // Sort with dirs first, then alphabetical ascending
+  private static function sort($a, $b) {
+    // dir > file
+    if ($a['type'] == 'd' && $b['type'] == 'f')
+      return -1;
+    else if ($a['type'] == 'f' && $b['type'] == 'd')
+      return 1;
+
+    return strcasecmp($a['name'], $b['name']);
+  }
+  
 }
