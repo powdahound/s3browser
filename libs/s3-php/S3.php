@@ -122,7 +122,7 @@ class S3 {
 	public static function getBucket($bucket, $prefix = null, $marker = null, $maxKeys = null, $delimiter = null) {
 		$rest = new S3Request('GET', $bucket, '');
 		if ($prefix !== null && $prefix !== '') $rest->setParameter('prefix', $prefix);
-		if ($marker !== null && $marker !== '') $rest->setParameter('marker', $marker);
+		if ($marker !== null && $marker !== '') $rest->setParameter('marker', urlencode($marker));
 		if ($maxKeys !== null && $maxKeys !== '') $rest->setParameter('max-keys', $maxKeys);
 		if ($delimiter !== null && $delimiter !== '') $rest->setParameter('delimiter', $delimiter);
 		$response = $rest->getResponse();
@@ -157,7 +157,7 @@ class S3 {
 		do {
 			$rest = new S3Request('GET', $bucket, '');
 			if ($prefix !== null) $rest->setParameter('prefix', $prefix);
-			$rest->setParameter('marker', $lastMarker);
+			$rest->setParameter('marker', urlencode($lastMarker));
 
 			if (($response = $rest->getResponse(true)) == false || $response->code !== 200) break;
 			if (isset($response->body, $response->body->Contents))
