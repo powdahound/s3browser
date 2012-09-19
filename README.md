@@ -23,10 +23,11 @@ Installation
           ServerName s3browser.example.com
           DocumentRoot /srv/www/s3browser
 
-          RewriteEngine On
-          RewriteBase /
-          RewriteCond %{REQUEST_FILENAME} !-f
-          RewriteRule . /index.php [L]
+          <Directory />
+            AllowOverride all
+            Order allow, deny
+            Allow from all
+          </Directory>
         </VirtualHost>
 
 4. Reload your Apache config:
