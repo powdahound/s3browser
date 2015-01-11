@@ -1,4 +1,1 @@
-*.swp
-.DS_Store
-._*
-config.php
+vendor/*
