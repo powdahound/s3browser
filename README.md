@@ -21,9 +21,10 @@ Installation on Heroku (preferred)
         heroku config:set S3_SECRET_KEY=xxx
         heroku config:set PAGE_HEADER=X's Files
 
-4. Deploy to Heroku
+4. Deploy to Heroku and load the site
 
         git push heroku master
+        heroku open
 
 
 Installation on Apache
