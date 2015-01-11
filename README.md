@@ -1,7 +1,7 @@
 Amazon S3 Directory Browser
 ===========================
 
-Please report any issues [here on GitHub][/issues].
+Please report any issues [here on GitHub](/issues).
 
 Installation on Heroku (preferred)
 ----------------------------------
