@@ -10,10 +10,12 @@ class S3Browser {
   private $cacheDuration;
   private $bucketContents;
   
-  function __construct($bucketName, $accessKey, $secretKey) {
+  function __construct($bucketName, $accessKey, $secretKey, $useSSL = true, $endPoint = 's3.amazonaws.com') {
     $this->s3Bucket = $bucketName;
     $this->s3AccessKey = $accessKey;
     $this->s3SecretKey = $secretKey;
+    $this->s3SSL = $useSSL;
+    $this->s3endPoint = $endPoint;
   }
 
   /**
@@ -78,7 +80,7 @@ class S3Browser {
     
     // hit s3 if we didn't have anything cached
     if (!$contents) {
-      $s3 = new S3($this->s3AccessKey, $this->s3SecretKey);
+      $s3 = new S3($this->s3AccessKey, $this->s3SecretKey, $this->s3useSSL, $this->s3endPoint);
       $contents = $s3->getBucket($this->s3Bucket);
 
       // we weren't able to access the bucket

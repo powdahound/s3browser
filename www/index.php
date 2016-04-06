@@ -15,8 +15,17 @@ if (!$config['bucket-name'] || !$config['s3-access-key'] ||
       ' config.php');
 }
 
+if(!$config['s3-ssl']){
+    $config['s3-ssl'] = true;
+}
+
+if(!$config['s3-endpoint']){
+    $config['s3-endpoint'] = 's3.amazonaws.com';
+}
+
+
 $s3b = new S3Browser($config['bucket-name'], $config['s3-access-key'],
-                     $config['s3-secret-key']);
+                     $config['s3-secret-key'], $config['s3-ssl'], $config['s3-endpoint']);
 $s3b->enableCaching($config['cache-dir'], $config['cache-time']);
 
 // Get current directory from URL
