@@ -14,7 +14,7 @@ class S3Browser {
     $this->s3Bucket = $bucketName;
     $this->s3AccessKey = $accessKey;
     $this->s3SecretKey = $secretKey;
-    $this->s3SSL = $useSSL;
+    $this->s3useSSL = $useSSL;
     $this->s3endPoint = $endPoint;
   }
 
