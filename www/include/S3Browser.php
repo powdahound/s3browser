@@ -9,7 +9,7 @@ class S3Browser {
   private $cacheDir;
   private $cacheDuration;
   private $bucketContents;
-  
+
   function __construct($bucketName, $accessKey, $secretKey, $useSSL = true, $endPoint = 's3.amazonaws.com') {
     $this->s3Bucket = $bucketName;
     $this->s3AccessKey = $accessKey;
@@ -30,7 +30,7 @@ class S3Browser {
     $this->cacheDir = $dir;
     $this->cacheDuration = $duration;
   }
-  
+
   /**
    * Returns list of file objects in the given path
    *
@@ -42,11 +42,11 @@ class S3Browser {
     if ($tree === null) {
       return null;
     }
-    
+
     $path = trim($path, '/');
     if ($path) {
       $parts = explode('/', $path);
-      
+
       // walk to correct point in tree
       foreach ($parts as $part) {
         if (!isset($tree[$part])) {
@@ -55,11 +55,11 @@ class S3Browser {
         $tree = $tree[$part]['files'];
       }
     }
-    
+
     uasort($tree, array($this, 'sort'));
     return $tree;
   }
-  
+
   /**
    * Get S3 bucket contents (from cache if possible)
    *
@@ -68,16 +68,16 @@ class S3Browser {
   private function getBucketContents() {
     $cacheFile = $this->cacheDir.'/s3browser-'.$this->s3Bucket;
     $contents = null;
-    
+
     // get from cache if valid
     if ($this->cacheDuration && file_exists($cacheFile)) {
       $cacheAge = time() - filectime($cacheFile);
-      
+
       if ($cacheAge < $this->cacheDuration) {
         $contents = unserialize(file_get_contents($cacheFile));
       }
     }
-    
+
     // hit s3 if we didn't have anything cached
     if (!$contents) {
       $s3 = new S3($this->s3AccessKey, $this->s3SecretKey, $this->s3useSSL, $this->s3endPoint);
@@ -87,16 +87,16 @@ class S3Browser {
       if (!is_array($contents)) {
         return null;
       }
-      
+
       // save if caching is enabled
       if ($this->cacheDuration) {
         file_put_contents($cacheFile, serialize($contents));
       }
     }
-    
+
     return $contents;
   }
-  
+
   /**
    * Build a tree representing the directory structure of the bucket's
    * contents.
@@ -109,7 +109,7 @@ class S3Browser {
     if ($contents === null) {
       return null;
     }
-    
+
     foreach ($contents as $key => $data) {
       $isFolder = false;
 
@@ -123,9 +123,9 @@ class S3Browser {
         $key = substr($key, 0, -1);
         $isFolder = true;
       }
-      
+
       $parts = explode('/', $key);
-      
+
       // add to tree
       $cur = &$tree;
       $numParts = count($parts);
@@ -149,10 +149,10 @@ class S3Browser {
               'files' => array());
           }
           $cur = &$cur[$part]['files'];
-        }        
+        }
       }
     }
-    
+
     return $tree;
   }
 
@@ -160,7 +160,7 @@ class S3Browser {
   /////////////////////////////////////////////////////////////////////////////
   // Static functions
   /////////////////////////////////////////////////////////////////////////////
-  
+
   /**
    * Takes a size in bytes and converts it to a more human-readable format
    *
@@ -179,7 +179,7 @@ class S3Browser {
 
     return number_format($size, ($unit ? 2 : 0)).''.$units[$unit];
   }
-  
+
   /**
    * Returns directory data for all levels of the given path to be used when
    * displaying a breadcrumb.
@@ -190,7 +190,7 @@ class S3Browser {
   public static function getBreadcrumb($path = '/') {
     if ($path == '/')
       return array('/' => '');
-    
+
     $path = trim($path, '/'); // so we don't get nulls when exploding
     $parts = explode('/', $path);
     $crumbs = array('/' => '');
@@ -198,19 +198,19 @@ class S3Browser {
     for ($i = 0; $i < count($parts); $i++) {
       $crumbs[$parts[$i]] = implode('/', array_slice($parts, 0, $i+1)).'/';
     }
-    
+
     return $crumbs;
   }
 
   /**
-   * Returns parent directory 
+   * Returns parent directory
    *
    * @param string $path
    * @return array
    */
   public static function getParent($path = '/') {
     $crumbs = self::getBreadcrumb($path);
-    
+
     $current = array_pop($crumbs);
     $parent = array_pop($crumbs);
 
