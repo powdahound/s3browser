@@ -114,11 +114,11 @@
   <div id="header">
     <h1><?= $config['page-header'] ?></h1>
   </div>
-  
+
   <div id="contents">
-    
+
     <div class="breadcrumb">
-      Index of 
+      Index of
       <ul>
         <li>
           <a href="<?= $config['base-path'] ?>/"><?= $config['bucket-name'] ?>/</a>
@@ -130,7 +130,7 @@
         <? endforeach ?>
       </ul>
     </div>
-  
+
     <? if (empty($files)): ?>
       <p>No files found.</p>
     <? else: ?>
@@ -147,7 +147,7 @@
     <? foreach ($files as $key => $info): ?>
       <? $asTorrent = (!is_null($config['torrent-threshold']) && $info['size'] > $config['torrent-threshold']); ?>
       <li>
-        <? if (is_array($info['files'])): ?>
+        <? if (array_key_exists('files', $info) && is_array($info['files'])): ?>
           <a href="<?= $config['base-path'] ?>/<?= $info['path'] ?>">
             <img src="<?= $config['base-path'] ?>/themes/plain/img/folder.gif">
             <span><?= $key ?></span>
@@ -163,7 +163,7 @@
     <? endforeach; ?>
     </ul>
     <? endif; ?>
-  
+
   </div>
 
   <div id="footer">
