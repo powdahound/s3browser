@@ -12,19 +12,19 @@
       padding: 0;
       margin: 0;
     }
-    
+
     body {
       background-color: #fff;
     }
-    
+
     p, li, td, div {
       font-size: 13px;
     }
-    
+
     img {
       border: 0;
     }
-    
+
     h2 {
       font-size: 1em;
       margin: 5px 0;
@@ -39,12 +39,12 @@
         ul li img {
           vertical-align: middle;
         }
-    
+
     span.size {
       color: #ccc;
       font-size: 10px;
     }
-    
+
     a {
       text-decoration: none;
        color: #666;
@@ -58,7 +58,7 @@
         a:hover span {
           text-decoration: underline;
         }
-    
+
     div.breadcrumb {
       margin-bottom: 5px;
       border-bottom: 1px solid #eee;
@@ -79,7 +79,7 @@
         div.breadcrumb ul li a:hover {
           background-color: #efefef;
         }
-    
+
     #header {
       background-color: #999;
       padding: 10px 15px;
@@ -89,12 +89,12 @@
         color: #000;
         font-size: 26px;
       }
-    
+
     #contents {
       border-top: 1px solid #eee;
        padding: 15px 20px;
     }
-    
+
     #footer {
       border-top: 1px solid #eee;
       padding: 2px 5px 5px;
@@ -165,11 +165,10 @@
     <? endif; ?>
   
   </div>
-  
+
   <div id="footer">
     <p>Powered by <a href="http://github.com/powdahound/s3browser/" target="_blank">S3 Browser</a></p>
   </div>
-
   <? if (isset($config['google-analytics-id'])): ?>
   <script type="text/javascript">
   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
