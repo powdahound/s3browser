@@ -38,7 +38,7 @@ class S3Browser {
    * @return array        Directory contents
    */
   public function getFiles($path = '/') {
-    $tree = $this->getTree();
+    $tree = $this->getTree($path);
     if ($tree === null) {
       return null;
     }
@@ -65,8 +65,8 @@ class S3Browser {
    *
    * @return array
    */
-  private function getBucketContents() {
-    $cacheFile = $this->cacheDir.'/s3browser-'.$this->s3Bucket;
+  private function getBucketContents($tree_path) {
+    $cacheFile = $this->cacheDir.'/s3browser-'.$this->s3Bucket.str_replace('/', '-', $tree_path);
     $contents = null;
 
     // get from cache if valid
@@ -81,7 +81,12 @@ class S3Browser {
     // hit s3 if we didn't have anything cached
     if (!$contents) {
       $s3 = new S3($this->s3AccessKey, $this->s3SecretKey, $this->s3useSSL, $this->s3endPoint);
-      $contents = $s3->getBucket($this->s3Bucket);
+      if ($tree_path == '/') {
+        $contents = $s3->getBucket($this->s3Bucket, null, null, null, $tree_path, true);
+      }
+      else {
+        $contents = $s3->getBucket($this->s3Bucket, ltrim($tree_path, '/'));
+      }
 
       // we weren't able to access the bucket
       if (!is_array($contents)) {
@@ -103,9 +108,9 @@ class S3Browser {
    *
    * @return array
    */
-  public function getTree() {
+  public function getTree($tree_path) {
     $tree = array();
-    $contents = $this->getBucketContents();
+    $contents = $this->getBucketContents($tree_path);
     if ($contents === null) {
       return null;
     }
